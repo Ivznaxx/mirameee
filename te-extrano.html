@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Te extraño mucho</title>
+  <meta name="description" content="Una página sencilla y romántica para decir: te extraño mucho… y un beso grande">
+  <style>
+    :root {
+      --bg1: #0f1020;
+      --bg2: #1b1338;
+      --accent: #ff5a99;
+      --accent-2: #ffd1e6;
+      --text: #f7f7fb;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background: radial-gradient(1200px 800px at 10% -10%, #3a235c33, transparent 60%),
+                  radial-gradient(1000px 700px at 110% 10%, #ff5a991a, transparent 60%),
+                  linear-gradient(160deg, var(--bg1), var(--bg2));
+      overflow-x: hidden;
+    }
+
+    .wrap { min-height: 100%; display: grid; place-items: center; padding: 2rem; }
+
+    .card {
+      position: relative; width: min(720px, 92vw); padding: clamp(1.5rem, 3vw, 2.5rem);
+      border-radius: 24px; background: #ffffff0f; backdrop-filter: blur(8px);
+      box-shadow: 0 20px 60px #00000066, inset 0 1px 0 #ffffff1a; border: 1px solid #ffffff22;
+      text-align: center;
+    }
+
+    h1 { margin: 0 0 .5rem; font-size: clamp(2rem, 6vw, 3rem); line-height: 1.05; letter-spacing: .4px; }
+    p { margin: .5rem 0 1.25rem; font-size: clamp(1.05rem, 2.6vw, 1.25rem); line-height: 1.6; color: #ececf6; }
+
+    .divider { height: 1px; width: 100%; background: linear-gradient(90deg, transparent, #ffffff3a, transparent); margin: 1rem 0 1.25rem; }
+
+    .beso {
+      margin: 0.5rem 0 0; font-size: clamp(1.5rem, 5vw, 2.25rem); font-weight: 700; letter-spacing: .5px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent;
+      display: flex; flex-direction: column; align-items: center; gap: 1rem;
+    }
+
+    /* Labios SVG con animación */
+    .kiss-lips { width: 170px; display: block; filter: drop-shadow(0 0 20px #ff5a99aa) drop-shadow(0 0 40px #ff5a9955); animation: pout 1.6s ease-in-out infinite; }
+    .kiss-lips .lip { fill: url(#lipGradient); }
+    .kiss-lips .shine { fill: url(#shineGradient); opacity: .65; }
+    @keyframes pout { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-2px) scale(1.08); } }
+
+    .hearts-layer { pointer-events: none; position: fixed; inset: 0; overflow: hidden; z-index: 0; }
+    .heart { position: absolute; bottom: -40px; font-size: 18px; opacity: .9; animation: rise linear forwards; }
+    @keyframes rise { to { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
+
+    .topbar { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); background: #ffffff12; border: 1px solid #ffffff22; border-radius: 999px; padding: .4rem .9rem; font-size: .95rem; box-shadow: 0 10px 30px #00000040; backdrop-filter: blur(8px); z-index: 2; }
+
+    .footer-note { margin-top: 1rem; font-size: .95rem; opacity: .85; }
+
+    .btn { appearance: none; border: 0; cursor: pointer; border-radius: 12px; padding: .65rem 1rem; font-weight: 600; background: linear-gradient(180deg, #ffffffcc, #ffffffaa); color: #2b1e3b; box-shadow: 0 8px 20px #0000003b; transition: transform .15s ease; }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; margin-top: 1rem; }
+
+    /* Modal de foto */
+    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: #000000dd; backdrop-filter: blur(6px); z-index: 50; padding: 1rem; }
+    .modal[open] { display: flex; }
+    .modal-card { background: #11131b; border: 1px solid #ffffff22; border-radius: 16px; padding: .5rem; max-width: 100%; max-height: 100%; box-shadow: 0 30px 70px #00000080; display: flex; flex-direction: column; align-items: center; }
+    .modal img { width: 100%; height: auto; max-height: 90vh; border-radius: 12px; object-fit: contain; }
+    .modal-actions { display: flex; justify-content: space-between; margin-top: .5rem; align-items: center; width: 100%; }
+    .pill { font-size: 1rem; opacity: .85; }
+  </style>
+</head>
+<body>
+  <div class="hearts-layer" aria-hidden="true" id="hearts"></div>
+
+  <div class="topbar">💌 Un mensajito especial</div>
+
+  <main class="wrap">
+    <section class="card" role="region" aria-label="Mensaje de cariño">
+      <h1>Te extraño mucho</h1>
+      <p>
+        Solo quería decirte que te extraño mucho. Pienso en ti todo el tiempo y
+        me hace mucha ilusión volver a verte.
+      </p>
+      <div class="divider" aria-hidden="true"></div>
+      <div class="beso">
+        <span>y un beso grande</span>
+        <!-- SVG en forma de labios -->
+        <svg class="kiss-lips" viewBox="0 0 200 120" role="img" aria-label="Beso en forma de labios">
+          <defs>
+            <linearGradient id="lipGradient" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#ff7aa8"/>
+              <stop offset="50%" stop-color="#ff3d7d"/>
+              <stop offset="100%" stop-color="#cc0f4f"/>
+            </linearGradient>
+            <linearGradient id="shineGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <!-- Labio superior -->
+          <path class="lip" d="M20,60 C40,40 70,30 100,45 C130,30 160,40 180,60 C150,55 130,60 100,62 C70,60 50,55 20,60 Z"/>
+          <!-- Labio inferior -->
+          <path class="lip" d="M20,60 C50,85 80,95 100,95 C120,95 150,85 180,60 C150,68 130,70 100,70 C70,70 50,68 20,60 Z"/>
+          <!-- Brillo -->
+          <path class="shine" d="M55,53 C70,45 90,45 105,52 C100,56 85,58 70,57 C62,56 58,55 55,53 Z"/>
+        </svg>
+      </div>
+      <div class="footer-note" id="firma">Con cariño, <strong>— Tu admirador</strong></div>
+
+      <div class="btn-row">
+        <button class="btn" id="btnToggle">🌟 Encender corazones</button>
+        <button class="btn" id="btnPhoto">📷 Mostrar nuestra foto</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal para mostrar la foto -->
+  <div class="modal" id="photoModal" role="dialog" aria-modal="true" aria-labelledby="photoTitle">
+    <div class="modal-card">
+      <img id="photoPreview" alt="Nuestra foto" src="5006134307814747778.jpg" />
+      <div class="modal-actions">
+        <span class="pill" id="photoTitle">💖 Ustedes dos</span>
+        <button class="btn" id="btnClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Referencias
+    const heartsLayer = document.getElementById('hearts');
+    const btnHearts = document.getElementById('btnToggle');
+    const btnPhoto = document.getElementById('btnPhoto');
+    const btnClose = document.getElementById('btnClose');
+    const modal = document.getElementById('photoModal');
+
+    // Corazones flotantes
+    let heartsOn = true; let heartTimer = null;
+    function makeHeart() {
+      const span = document.createElement('span');
+      span.className = 'heart'; span.textContent = Math.random() < 0.5 ? '💖' : '❤️';
+      span.style.left = Math.random() * 100 + 'vw';
+      const dur = 5 + Math.random() * 4; span.style.animationDuration = dur + 's';
+      span.style.fontSize = (14 + Math.random() * 22) + 'px';
+      heartsLayer.appendChild(span); span.addEventListener('animationend', () => span.remove());
+    }
+    function startHearts(){ if (heartTimer) return; heartsOn = true; btnHearts.textContent = '✨ Corazones encendidos'; heartTimer = setInterval(makeHeart, 350);} 
+    function stopHearts(){ heartsOn = false; btnHearts.textContent = '🌟 Encender corazones'; clearInterval(heartTimer); heartTimer = null; }
+    btnHearts.addEventListener('click', () => { heartsOn ? stopHearts() : startHearts(); });
+    startHearts();
+
+    // Lógica modal foto
+    function openModal(){ modal.setAttribute('open',''); }
+    function closeModal(){ modal.removeAttribute('open'); }
+    btnPhoto.addEventListener('click', openModal);
+    btnClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+  </script>
+</body>
+</html>
